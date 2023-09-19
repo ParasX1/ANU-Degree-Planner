@@ -4,9 +4,32 @@
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+If you don't have Homebrew installed, you can install it using the following command:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" `
+
+
+Then, install Node.js and npm:
+
+`brew install node `
+
+Verify the installation by checking the Node.js and npm versions:
+
+```
+node -v 
+npm -v
+```
+
+To run the application:
+
+`cd front-end/degree-planner`
+
+then:
+
+`npm start`
+
+this will open the application in your preferred browser.
+
 
 ## Add your files
 
