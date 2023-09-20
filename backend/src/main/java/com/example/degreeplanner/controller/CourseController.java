@@ -18,8 +18,8 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Course>> searchCourses(@RequestParam String search) {
+    @GetMapping("/data")
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam(required = false, defaultValue = "") String search) {
         List<Course> courses = courseService.searchCoursesByCode(search);
         return ResponseEntity.ok(courses);
     }
