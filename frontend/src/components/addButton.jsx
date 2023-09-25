@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 
-function AddButton() {
+function AddButton({addCard}) {
   // State for managing drawer open/close
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // State for managing search query and results
@@ -50,6 +50,11 @@ function AddButton() {
         // Handle any errors
         console.error(error);
       });
+  };
+
+  const handleCardClick = (cardData) => {
+    addCard(cardData);
+    closeDrawer();
   };
 
   return (
@@ -86,12 +91,15 @@ function AddButton() {
                 <ul>
                 <Box>
                   {searchResults.map((result) => (
-                    <Card
-                      tag1={result.semester}
-                      tag2={result.units}
-                      title={result.code}
-                      description="Ryan forgot to add the name"
-                    />
+                    <div key = {result.id} onClick={() => handleCardClick(result)}>
+                      <Card
+                        key={result.code}
+                        tag1={"Semester " + result.semester}
+                        tag2={result.units + " Units"}
+                        title={result.code}
+                        description="Ryan forgot to add the name"
+                      />
+                    </div>
                   ))}
                 </Box>
                 </ul>
