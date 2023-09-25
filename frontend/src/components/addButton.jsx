@@ -1,3 +1,9 @@
+//import Header from "../components/headerHome";
+//import Title from "../components/title";
+import Card from "../components/card";
+//import Year from "../components/years";
+//import Semester from "../components/semester";
+//import Add from "../components/addButton"
 // This is the AddButton component. It is responsible for rendering an Add button and a Drawer component.
 // The Add button, when clicked, opens the Drawer component. The Drawer component contains a search input field.
 // Importing necessary libraries and components
@@ -34,7 +40,7 @@ function AddButton() {
   // Function to handle the search when the button is clicked
   const handleSearchButtonClick = () => {
     // Make an API request to your backend for searching
-    fetch(`localhost:8080/api/courses/data?search=${searchTerm}`)
+    fetch(`http://localhost:8080/api/courses/data?search=${searchTerm}`)
       .then((response) => response.json())
       .then((data) => {
         // Handle the response by updating the searchResults state
@@ -78,9 +84,16 @@ function AddButton() {
 
                 {/* Display search results within the drawer */}
                 <ul>
+                <Box>
                   {searchResults.map((result) => (
-                    <li key={result.id}>{result.name}</li>
+                    <Card
+                      tag1={result.semester}
+                      tag2={result.units}
+                      title={result.code}
+                      description="Ryan forgot to add the name"
+                    />
                   ))}
+                </Box>
                 </ul>
               </Box>
             </DrawerBody>

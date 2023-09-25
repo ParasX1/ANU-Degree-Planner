@@ -13,7 +13,7 @@ import java.util.List;
 public class CourseController {
 
     @Autowired
-    private CourseService courseService;
+    private CourseService courseService;    
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/data")
