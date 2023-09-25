@@ -34,7 +34,17 @@ function Home() {
             <Add/>
           </Box>
           </Flex>
-          <Semester text="Semester 2"/>
+        </Box>
+        <Semester text="Semester 2"/>
+        <Box>
+          <Flex pl={10}>
+          <Card
+            tag1="Semester 1"
+            tag2="6 Units"
+            title="COMP1110"
+            description="Structured Programming"
+          />
+          </Flex>
         </Box>
       </Box>
     </>
