@@ -1,12 +1,3 @@
-//import Header from "../components/headerHome";
-//import Title from "../components/title";
-import Card from "../components/card";
-//import Year from "../components/years";
-//import Semester from "../components/semester";
-//import Add from "../components/addButton"
-// This is the AddButton component. It is responsible for rendering an Add button and a Drawer component.
-// The Add button, when clicked, opens the Drawer component. The Drawer component contains a search input field.
-// Importing necessary libraries and components
 import React, { useState } from "react";
 import {
   Box,
@@ -16,28 +7,26 @@ import {
   DrawerHeader,
   DrawerOverlay,
   IconButton,
+  Input,
+  Button,
+  Flex, // Import Flex component
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { SearchIcon, AddIcon } from "@chakra-ui/icons";
+import Card from "../components/card";
 
-function AddButton({addCard}) {
-  // State for managing drawer open/close
+function AddButton({ addCard }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  // State for managing search query and results
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // Function to open the drawer
   const openDrawer = () => setIsDrawerOpen(true);
 
-  // Function to close the drawer
   const closeDrawer = () => {
     setIsDrawerOpen(false);
-    // Clear search query and results when closing the drawer
     setSearchTerm("");
     setSearchResults([]);
   };
 
-  // Function to handle the search when the button is clicked
   const handleSearchButtonClick = () => {
     // Make an API request to your backend for searching
     fetch(`http://localhost:8080/api/courses/data?search=${searchTerm}`)
@@ -60,38 +49,47 @@ function AddButton({addCard}) {
   return (
     <>
       <IconButton
-        icon={<AddIcon color="white" />}
+        icon={<AddIcon color="gold" />} // Change the button color to gold
         bg="black"
         aria-label="Open Drawer"
         borderRadius="50%"
         onClick={openDrawer}
+        size="lg"
       />
 
       <Drawer
         placement="right"
         onClose={closeDrawer}
         isOpen={isDrawerOpen}
-        size="md" // Set the size of the drawer
+        size="md"
       >
         <DrawerOverlay>
           <DrawerContent>
             <DrawerHeader borderBottomWidth="1px">Search</DrawerHeader>
             <DrawerBody>
-              <Box p="4">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="chakra-input"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button onClick={handleSearchButtonClick}>Search</button>
+              <Box p="5">
+                <Flex> {/* Use Flex to create a horizontal layout */}
+                  <Input
+                    type="text"
+                    placeholder="Search Courses ..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    size="lg"
+                  />
+                  <Button
+                    colorScheme="teal"
+                    leftIcon={<SearchIcon />}
+                    onClick={handleSearchButtonClick}
+                    ml="2" // Add margin-left for spacing
+                    mt="0" // Remove margin-top
+                  >
+                    Search
+                  </Button>
+                </Flex>
 
-                {/* Display search results within the drawer */}
-                <ul>
-                <Box>
-                  {searchResults.map((result) => (
-                    <div key = {result.id} onClick={() => handleCardClick(result)}>
+                <Box mt="4">
+                  {searchResults.map((result, index) => (
+                    <div key={result.id} onClick={() => handleCardClick(result)}>
                       <Card
                         key={result.code}
                         tag1={"Semester " + result.semester}
@@ -102,7 +100,6 @@ function AddButton({addCard}) {
                     </div>
                   ))}
                 </Box>
-                </ul>
               </Box>
             </DrawerBody>
           </DrawerContent>

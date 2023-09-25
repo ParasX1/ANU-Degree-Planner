@@ -3,12 +3,37 @@ import Title from "../components/title";
 import Card from "../components/card";
 import Year from "../components/years";
 import Semester from "../components/semester";
-import Add from "../components/addButton"
-import { Box, Flex} from "@chakra-ui/react";
+import Add from "../components/addButton";
+import { Box, Flex, IconButton } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
-function Home() {
 
+function Home() {
   const [addedCards, setAddedCards] = useState([]);
+
+  const addCard = (cardData) => {
+    // Check if a card with the same code already exists
+    const cardExists = addedCards.some((card) => card.code === cardData.code);
+
+    if (cardExists) { alert("This course is already added."); return;}
+
+    // Check if the maximum limit of 4 cards per semester is reached
+    const semesterCards = addedCards.filter((card) => card.semester === cardData.semester);
+
+    console.log("Number of cards in the current semester:", semesterCards.length);
+
+    if (semesterCards.length >= 4) { alert("Maximum limit of 4 courses per semester reached."); return;}
+
+    // Add the card
+    setAddedCards([...addedCards, cardData]);
+  };
+
+
+  // Function to delete a card
+  const deleteCard = (cardCode) => {
+    const updatedCards = addedCards.filter((card) => card.code !== cardCode);
+    setAddedCards(updatedCards);
+  };
 
   return (
     <>
@@ -18,26 +43,42 @@ function Home() {
         <div style={{ paddingTop: "60px" }}>
           <Title />
         </div>
-        <Year text="YEAR 1"/>
-        <Semester text="Semester 1"/>
+        <Year text="YEAR 1" />
+        <Semester text="Semester 1" />
         <Box>
           <Flex pl={10}>
-          {addedCards.map((card, index) => (
+            {addedCards.map((card, index) => (
+              <Box
+                key={card.code}
+                position="relative"
+                marginRight="10px"
+              >
+                <IconButton
+                  icon={<CloseIcon />}
+                  aria-label="Delete Card"
+                  size="sm"
+                  variant="ghost"
+                  position="absolute"
+                  top="0"
+                  right="0"
+                  onClick={() => deleteCard(card.code)}
+                />
                 <Card
-                key = {card.code}
-                tag1={"Semester " + card.semester}
-                tag2={card.units + " Units"}
-                title={card.code}
-                description="Ryan forgot to add the name"
-              />
-              ))}
-          <Box ml={120} mt={75}>
-            <Add addCard={(cardData) => setAddedCards([...addedCards, cardData])}/>
-          </Box>
+                  tag1={"Semester " + card.semester}
+                  tag2={card.units + " Units"}
+                  title={card.code}
+                  description="Ryan forgot to add the name"
+                />
+              </Box>
+            ))}
+            <Box ml={120} mt={75}>
+              <Add addCard={addCard} />
+            </Box>
           </Flex>
         </Box>
       </Box>
     </>
   );
 }
+
 export default Home;
