@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Drawer,
@@ -27,23 +27,33 @@ function AddButton({ addCard }) {
     setSearchResults([]);
   };
 
-  const handleSearchButtonClick = () => {
-    // Make an API request to your backend for searching
+  const searchDatabase = useCallback(() => {
+    console.log('Le Search is le called for');
+    // if search term is empty, avoid making the API call.
+    if (searchTerm.trim() === "") return;
+  
     fetch(`http://localhost:8080/api/courses/data?search=${searchTerm}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response by updating the searchResults state
-        setSearchResults(data); // Assuming the API returns an array of results
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-  };
+        .then((response) => response.json())
+        .then((data) => setSearchResults(data))
+        .catch((error) => console.error(error));
+  }, [searchTerm]); // declaring searchTerm as a dependency as it’s used inside the function
+
+  useEffect(() => {
+    console.log('Component has rendered/re-rendered');
+    const timerId = setTimeout(() => {
+      searchDatabase();
+    }, 500);
+    return () => clearTimeout(timerId);
+  }, [searchTerm, searchDatabase]);
 
   const handleCardClick = (cardData) => {
     addCard(cardData);
     closeDrawer();
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Prevent default behavour
+    searchDatabase(); //Calls the search API
   };
 
   return (
@@ -68,25 +78,26 @@ function AddButton({ addCard }) {
             <DrawerHeader borderBottomWidth="1px">Search</DrawerHeader>
             <DrawerBody>
               <Box p="5">
-                <Flex> {/* Use Flex to create a horizontal layout */}
-                  <Input
-                    type="text"
-                    placeholder="Search Courses ..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    size="lg"
-                  />
-                  <Button
-                    colorScheme="teal"
-                    leftIcon={<SearchIcon />}
-                    onClick={handleSearchButtonClick}
-                    ml="2" // Add margin-left for spacing
-                    mt="0" // Remove margin-top
-                  >
-                    Search
-                  </Button>
-                </Flex>
-
+                <form onSubmit={handleFormSubmit}> 
+                  <Flex> {/* Use Flex to create a horizontal layout */}
+                    <Input
+                      type="text"
+                      placeholder="Search Courses ..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      size="lg"
+                    />
+                    <Button
+                      colorScheme="teal"
+                      leftIcon={<SearchIcon />}
+                      onClick={searchDatabase}
+                      ml="2" // Add margin-left for spacing
+                      mt="0" // Remove margin-top
+                    >
+                      Search
+                    </Button>
+                  </Flex>
+                </form>
                 <Box mt="4">
                   {searchResults.map((result, index) => (
                     <div key={result.id} onClick={() => handleCardClick(result)}>
