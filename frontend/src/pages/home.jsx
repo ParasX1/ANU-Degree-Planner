@@ -4,8 +4,7 @@ import Card from "../components/card";
 import Year from "../components/years";
 import Semester from "../components/semester";
 import Add from "../components/addButton";
-import { Box, Flex, IconButton } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 function Home() {
@@ -14,23 +13,19 @@ function Home() {
   const addCard = (cardData) => {
     // Check if a card with the same code already exists
     const cardExists = addedCards.some((card) => card.code === cardData.code);
-
     if (cardExists) { alert("This course is already added."); return;}
 
     // Check if the maximum limit of 4 cards per semester is reached
     const semesterCards = addedCards.filter((card) => card.semester === cardData.semester);
-
     console.log("Number of cards in the current semester:", semesterCards.length);
-
     if (semesterCards.length >= 4) { alert("Maximum limit of 4 courses per semester reached."); return;}
 
     // Add the card
     setAddedCards([...addedCards, cardData]);
   };
 
-
   // Function to delete a card
-  const deleteCard = (cardCode) => {
+  const onDelete = (cardCode) => {
     const updatedCards = addedCards.filter((card) => card.code !== cardCode);
     setAddedCards(updatedCards);
   };
@@ -53,21 +48,13 @@ function Home() {
                 position="relative"
                 marginRight="10px"
               >
-                <IconButton
-                  icon={<CloseIcon />}
-                  aria-label="Delete Card"
-                  size="sm"
-                  variant="ghost"
-                  position="absolute"
-                  top="0"
-                  right="0"
-                  onClick={() => deleteCard(card.code)}
-                />
                 <Card
                   tag1={"Semester " + card.semester}
                   tag2={card.units + " Units"}
                   title={card.code}
                   description="Ryan forgot to add the name"
+                  code={card.code}
+                  onDelete={onDelete}
                 />
               </Box>
             ))}
