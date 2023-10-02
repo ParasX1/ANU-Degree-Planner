@@ -1,20 +1,29 @@
+import React, { useState } from "react";
+import { Box, Flex } from "@chakra-ui/react";
 import Header from "../components/headerHome";
 import Title from "../components/title";
 import Card from "../components/card";
 import Year from "../components/years";
 import Semester from "../components/semester";
 import Add from "../components/addButton";
-import { Box, Flex } from "@chakra-ui/react";
-import React, { useState } from "react";
 
 function Home() {
   const [addedCards, setAddedCards] = useState([]);
+  const [years, setYears] = useState([1]);
 
-  const addCard = (cardData) => {
-    // Check if a card with the same code already exists
-    const cardExists = addedCards.some((card) => card.code === cardData.code);
-    if (cardExists) { alert("This course is already added."); return;}
+  const addCard = (cardData, targetSemester) => {
 
+      // Check if a card with the same code already exists
+      const cardExists = addedCards.some((card) => card.code === cardData.code);
+      if (cardExists) {
+       alert("This course is already added.");
+       return;
+      }
+       // Validate the semester
+       if (cardData.semester !== targetSemester) {
+         alert(`This course is designed for Semester ${cardData.semester} and can't be added to Semester ${targetSemester}.`);
+         return;
+       }
     // Check if the maximum limit of 4 cards per semester is reached
     const semesterCards = addedCards.filter((card) => card.semester === cardData.semester);
     console.log("Number of cards in the current semester:", semesterCards.length);
@@ -30,42 +39,56 @@ function Home() {
     setAddedCards(updatedCards);
   };
 
+  // Function to add new year
+  const addNewYear = () => {
+     const nextYear = years[years.length - 1] + 1;
+       setYears([...years, nextYear]);
+     };
+
   return (
-    <>
-      <h1>TEST</h1>
-      <Box>
-        <Header />
-        <div style={{ paddingTop: "60px" }}>
-          <Title />
-        </div>
-        <Year text="YEAR 1" />
-        <Semester text="Semester 1" />
-        <Box>
-          <Flex pl={10}>
-            {addedCards.map((card, index) => (
-              <Box
-                key={card.code}
-                position="relative"
-                marginRight="10px"
-              >
-                <Card
-                  tag1={"Semester " + card.semester}
-                  tag2={card.units + " Units"}
-                  title={card.code}
-                  description="Ryan forgot to add the name"
-                  code={card.code}
-                  onDelete={onDelete}
-                />
-              </Box>
-            ))}
-            <Box ml={120} mt={75}>
-              <Add addCard={addCard} />
-            </Box>
-          </Flex>
-        </Box>
-      </Box>
-    </>
-  );
-}
+      <>
+          <h1>TEST</h1>
+          <Box>
+              <Header />
+              <div style={{ paddingTop: "60px" }}>
+                  <Title />
+              </div>
+
+              {years.map((year) => (
+                  <div key={year}>
+                      <Year text={`YEAR ${year}`} />
+                      {['Semester 1', 'Semester 2'].map((semesterText, semesterIndex) => (
+                          <div key={semesterText}>
+                              <Semester text={semesterText} />
+                              <Box>
+                                  <Flex pl={10}>
+                                      {addedCards
+                                          .filter((card) => card.semester === semesterIndex + 1)
+                                          .map((card, Index) => (
+                                              <Box key={card.code} position="relative" marginRight="10px">
+                                                  <Card
+                                                      tag1={"Semester " + card.semester}
+                                                      tag2={card.units + " Units"}
+                                                      title={card.code}
+                                                      description="Ryan forgot to add the name"
+                                                      code={card.code}
+                                                      onDelete={onDelete}
+                                                  />
+                                              </Box>
+                                          ))}
+                                      <Box ml={10} mt={10}>
+                                          <Add addCard={(cardData) => addCard(cardData, semesterIndex + 1)} />
+                                      </Box>
+                                  </Flex>
+                              </Box>
+                          </div>
+                      ))}
+                  </div>
+              ))}
+          <button onClick={addNewYear}>Add New Year</button>
+                </Box>
+              </>
+            );
+          }
 
 export default Home;
