@@ -122,19 +122,6 @@ return (
           <Title onSave={saveAsPDF} isPDFMode={isPDFMode}/>
       </div>
 
-      <Box width="100%" py="20px" display="flex" justifyContent="center">
-        <Button
-         data-hide-for-pdf="true"
-         onClick={addNewYear}
-         borderRadius= "full"
-         bg="#BB8B00"
-         color="white"
-         _hover={{ bg: "Black" }}
-         >
-         ADD YEAR
-       </Button>
-      </Box>
-
       <div id="contentToSave">
       {years.map((year, yearIndex) => (
           <div key={year}>
@@ -171,6 +158,18 @@ return (
           </div>
       ))}
       </div>
+      <Box width="100%" py="20px" display="flex" justifyContent="center">
+              <Button
+               data-hide-for-pdf="true"
+               onClick={addNewYear}
+               borderRadius= "full"
+               bg="#BB8B00"
+               color="white"
+               _hover={{ bg: "Black" }}
+               >
+               ADD YEAR
+             </Button>
+            </Box>
       </Box>
     </>
 );
