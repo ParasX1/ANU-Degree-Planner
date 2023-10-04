@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text, Flex, IconButton, Tooltip, Divider } from '@chakra-ui/react';
 import { FaSearch, FaBookmark } from 'react-icons/fa'; // Import the search and bookmark icons
 
-function Title() {
+function Title({onSave, isPDFMode}) { // Adding onSave prop
   return (
     <>
       <Flex
@@ -11,7 +11,7 @@ function Title() {
         alignItems="center"
         justifyContent="space-between"
         paddingLeft="70px"
-        paddingRight="10%" // Adjust right padding for spacing
+        paddingRight="8%" // Adjust right padding for spacing
         paddingTop="20px"
       >
         <Box>
@@ -32,36 +32,52 @@ function Title() {
             Bachelor of Advanced Computing
           </Text>
         </Box>
-        <Box display="flex" alignItems="center">
-          <Tooltip label="Search">
-            <IconButton
-              aria-label="Search"
-              icon={<FaSearch color="white" />}
-              borderRadius="50%"
-              bg="black"
-              marginLeft="10px" // Adjust left margin for spacing
-            />
-          </Tooltip>
-          <Tooltip label="Bookmark">
-            <IconButton
-              aria-label="Bookmark"
-              icon={<FaBookmark color="white" />}
-              borderRadius="50%"
-              bg="black"
-              marginLeft="10px" // Adjust left margin for spacing
-            />
-          </Tooltip>
-        </Box>
+
+
+        <Flex>
+          <Flex flexDirection="column" alignItems="center" ml="10px" mt="20px">
+            {!isPDFMode && ( // Conditional rendering for the Search icon
+            <>
+            <Tooltip label="Search">
+              <IconButton
+                aria-label="Search"
+                icon={<FaSearch color="white" />}
+                borderRadius="50%"
+                bg="black"
+              />
+            </Tooltip>
+            <Text mt="1" color="black" fontSize="xs">Search</Text>
+            </>
+          )}
+        </Flex>
+
+        <Flex flexDirection="column" alignItems="center" ml="10px" mt="20px">
+          {!isPDFMode && ( // Conditional rendering for the Save icon
+            <>
+            <Tooltip label="Save">
+              <IconButton
+                aria-label="Save"
+                icon={<FaBookmark color="white" />}
+                borderRadius="50%"
+                bg="black"
+                onClick = {onSave} // calling onSave function when the save button is clicked
+              />
+            </Tooltip>
+            <Text mt="1" color="black" fontSize="xs">Save</Text>
+            </>
+          )}
+          </Flex>
+        </Flex>
       </Flex>
+
       <Divider
-        mt="10px"
-        ml="70px" // Add left margin for padding
+        mt="20px"
         borderWidth="0.4pt"
         borderColor="#BB8B00"
-        width="90%" // Adjust the width of the line
       />
     </>
   );
 }
 
 export default Title;
+
