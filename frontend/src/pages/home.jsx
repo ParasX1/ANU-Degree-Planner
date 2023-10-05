@@ -11,8 +11,8 @@ import { jsPDF } from 'jspdf';
 
 
 function Home() {
-  const [addedCards, setAddedCards] = useState([[]]);
-  const [years, setYears] = useState([1]); // Empty array as the initial state
+  const [addedCards, setAddedCards] = useState([]);
+  const [years, setYears] = useState([]); // Empty array as the initial state
   const [isPDFMode, setIsPDFMode] = useState(false);
 
 
@@ -81,10 +81,9 @@ function Home() {
     };
 
    // Function to delete a card
-    const onDelete = (cardCode) => {
-        const updatedCards = addedCards.map(yearCards =>
-          yearCards.filter(card => card.code !== cardCode)
-        );
+    const onDelete = (cardCode, yearIndex) => {
+        const updatedCards = [...addedCards];
+        updatedCards[yearIndex] = updatedCards[yearIndex].filter(card => card.code !== cardCode);
         setAddedCards(updatedCards);
     };
 
@@ -103,15 +102,11 @@ function Home() {
 
 
    // Function to add new year
-    const addNewYear = () => {
-        if (years.length === 0) {
-            setYears([1]);
-        } else {
-            const nextYear = years[years.length - 1] + 1;
-            setYears([...years, nextYear]);
-        }
-        setAddedCards([...addedCards, []]);
-    };
+     const addNewYear = () => {
+         const nextYear = years.length === 0 ? 1 : years[years.length - 1] + 1;
+         setYears([...years, nextYear]);
+         setAddedCards([...addedCards, []]);
+   };
 
 return (
 <>
@@ -144,7 +139,7 @@ return (
                                               title={card.code}
                                               description="Ryan forgot to add the name"
                                               code={card.code}
-                                              onDelete={() => onDelete(card.code)}
+                                              onDelete={() => onDelete(card.code, yearIndex)}
                                           />
                                       </Box>
                                   ))}
