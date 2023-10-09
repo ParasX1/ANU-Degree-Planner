@@ -13,6 +13,8 @@ public class Course {
     @Column(name = "course_code")
     private String code;
 
+    private String description;
+
     private String subject;
 
     private String catalogue;
@@ -31,6 +33,10 @@ public class Course {
 
     public Course() {
 
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getCode() {

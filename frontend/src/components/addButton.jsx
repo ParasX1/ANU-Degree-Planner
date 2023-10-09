@@ -47,7 +47,6 @@ function AddButton({ addCard }) {
 
   const handleCardClick = (cardData) => {
     addCard(cardData);
-    closeDrawer();
   };
 
   const handleFormSubmit = (e) => {
@@ -105,7 +104,7 @@ function AddButton({ addCard }) {
                         tag1={"Semester " + result.semester}
                         tag2={result.units + " Units"}
                         title={result.code}
-                        description="Ryan forgot to add the name"
+                        description={result.description}
                       />
                     </div>
                   ))}
