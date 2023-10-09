@@ -101,12 +101,10 @@ function Home() {
     };
 
 
-   // Function to add new year
-     const addNewYear = () => {
-         const nextYear = years.length === 0 ? 1 : years[years.length - 1] + 1;
-         setYears([...years, nextYear]);
-         setAddedCards([...addedCards, []]);
-   };
+  const addNewYear = () => {
+    setYears([...years, {}]);  // We just add an empty object to denote a new year.
+    setAddedCards([...addedCards, []]);
+  };
 
 return (
 <>
@@ -116,57 +114,56 @@ return (
       <div style={{ paddingTop: "60px" }}>
           <Title onSave={saveAsPDF} isPDFMode={isPDFMode}/>
       </div>
-
       <div id="contentToSave">
       {years.map((year, yearIndex) => (
-          <div key={year}>
-              <Year
-                  text={`YEAR ${year}`}
-                  onDelete={() => deleteYear(yearIndex)}
-              />
-              {['Semester 1', 'Semester 2'].map((semesterText, semesterIndex) => (
-                  <div key={semesterText} style={{ marginBottom: semesterIndex === 0 ? '20px' : '0' }}>
-                      <Semester text={semesterText} />
-                      <Box>
-                          <Flex pl={10}>
-                              {addedCards[yearIndex]
-                                  .filter((card) => card.semester === semesterIndex + 1)
-                                  .map((card, Index) => (
-                                      <Box key={card.code} position="relative" marginRight="10px">
-                                          <Card
-                                              tag1={"Semester " + card.semester}
-                                              tag2={card.units + " Units"}
-                                              title={card.code}
-                                              description="Ryan forgot to add the name"
-                                              code={card.code}
-                                              onDelete={() => onDelete(card.code, yearIndex)}
-                                          />
-                                      </Box>
-                                  ))}
-                              <Box ml={10} mt={10}>
-                                  <Add addCard={(cardData) => addCard(cardData, yearIndex, semesterIndex + 1)} />
-                              </Box>
-                          </Flex>
-                      </Box>
-                  </div>
-              ))}
-          </div>
-      ))}
-      </div>
-      <Box width="100%" py="20px" display="flex" justifyContent="center">
-              <Button
-               data-hide-for-pdf="true"
-               onClick={addNewYear}
-               borderRadius= "full"
-               bg="#BB8B00"
-               color="white"
-               _hover={{ bg: "Black" }}
-               >
-               ADD YEAR
-             </Button>
+        <div key={year}>
+          <Year
+            text={`YEAR ${yearIndex + 1}`}  // Use the yearIndex + 1 as the year number.
+            onDelete={() => deleteYear(yearIndex)}
+          />
+            {['Semester 1', 'Semester 2'].map((semesterText, semesterIndex) => (
+              <div key={semesterText} style={{ marginBottom: semesterIndex === 0 ? '20px' : '0' }}>
+                <Semester text={semesterText} />
+                  <Box>
+                    <Flex pl={10}>
+                      {addedCards[yearIndex]
+                        .filter((card) => card.semester === semesterIndex + 1)
+                        .map((card, Index) => (
+                          <Box key={card.code} position="relative" marginRight="10px">
+                            <Card
+                              tag1={"Semester " + card.semester}
+                              tag2={card.units + " Units"}
+                              title={card.code}
+                              description="Ryan forgot to add the name"
+                              code={card.code}
+                              onDelete={() => onDelete(card.code, yearIndex)}
+                            />
+                          </Box>
+                        ))}
+                    <Box ml={10} mt={10}>
+                  <Add addCard={(cardData) => addCard(cardData, yearIndex, semesterIndex + 1)} />
+                </Box>
+              </Flex>
             </Box>
-      </Box>
-    </>
+          </div>
+        ))}
+      </div>
+    ))}
+    </div>
+    <Box width="100%" py="20px" display="flex" justifyContent="center">
+            <Button
+              data-hide-for-pdf="true"
+              onClick={addNewYear}
+              borderRadius= "full"
+              bg="#BB8B00"
+              color="white"
+              _hover={{ bg: "Black" }}
+              >
+              ADD YEAR
+            </Button>
+          </Box>
+    </Box>
+  </>
 );
 }
 export default Home;

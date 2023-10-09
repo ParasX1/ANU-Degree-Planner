@@ -28,7 +28,6 @@ function AddButton({ addCard }) {
   };
 
   const searchDatabase = useCallback(() => {
-    console.log('Le Search is le called for');
     // if search term is empty, avoid making the API call.
     if (searchTerm.trim() === "") return;
   
@@ -99,7 +98,7 @@ function AddButton({ addCard }) {
                   </Flex>
                 </form>
                 <Box mt="4">
-                  {searchResults.map((result, index) => (
+                  {searchResults.slice(0, 4).map((result, index) => (
                     <div key={result.id} onClick={() => handleCardClick(result)}>
                       <Card
                         key={result.code}
