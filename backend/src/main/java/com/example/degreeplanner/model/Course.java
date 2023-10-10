@@ -2,6 +2,7 @@ package com.example.degreeplanner.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,9 @@ public class Course {
 
     private String prerequisite;
 
+    @Column(name = "prereq_processed")
+    private String prereqProcessed;
+
     @Column(name = "website_link")
     private String webLink;
 
@@ -41,4 +45,11 @@ public class Course {
         String level = catalogue.substring(0, 1);
         return Integer.parseInt(level) * 1000;
     }
+
+    @JsonIgnore
+    public String getPrereqProcessed() {
+        return prereqProcessed;
+    }
+
+
 }

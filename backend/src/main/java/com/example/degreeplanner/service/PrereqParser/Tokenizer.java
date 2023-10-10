@@ -25,6 +25,9 @@ public class Tokenizer {
      * @param prereqs A formatted pre-requisite string for a course.
      */
     public Tokenizer(String prereqs) {
+        if (prereqs == null) {
+            prereqs = "";
+        }
         buffer = prereqs.toUpperCase();
         next();
     }
