@@ -1,7 +1,4 @@
-// This is the AddButton component. It is responsible for rendering an Add button and a Drawer component.
-// The Add button, when clicked, opens the Drawer component. The Drawer component contains a search input field.
-// Importing necessary libraries and components
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Box,
   Drawer,
@@ -10,78 +7,100 @@ import {
   DrawerHeader,
   DrawerOverlay,
   IconButton,
+  Input,
+  Button,
+  Flex, // Import Flex component
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { SearchIcon, AddIcon } from "@chakra-ui/icons";
+import Card from "../components/card";
 
-function AddButton() {
-  // State for managing drawer open/close
+function AddButton({ addCard }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  // State for managing search query and results
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // Function to open the drawer
   const openDrawer = () => setIsDrawerOpen(true);
 
-  // Function to close the drawer
   const closeDrawer = () => {
     setIsDrawerOpen(false);
-    // Clear search query and results when closing the drawer
     setSearchTerm("");
     setSearchResults([]);
   };
 
-  // Function to handle the search when the button is clicked
-  const handleSearchButtonClick = () => {
-    // Make an API request to your backend for searching
-    fetch(`localhost:8080/api/courses/data?search=${searchTerm}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response by updating the searchResults state
-        setSearchResults(data); // Assuming the API returns an array of results
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
+  const searchDatabase = useCallback(() => {
+    // if search term is empty, avoid making the API call.
+    if (searchTerm.trim() === "") return;
+  
+    fetch(`http://localhost:8080/api/courses/data?search=${searchTerm}`)
+        .then((response) => response.json())
+        .then((data) => setSearchResults(data))
+        .catch((error) => console.error(error));
+  }, [searchTerm]); // declaring searchTerm as a dependency as it’s used inside the function
+
+  const handleCardClick = (cardData) => {
+    addCard(cardData);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Prevent default behavour
+    searchDatabase(); //Calls the search API
   };
 
   return (
     <>
       <IconButton
-        icon={<AddIcon color="white" />}
+        icon={<AddIcon color="gold" />} // Change the button color to gold
         bg="black"
         aria-label="Open Drawer"
         borderRadius="50%"
         onClick={openDrawer}
+        size="lg"
       />
 
       <Drawer
         placement="right"
         onClose={closeDrawer}
         isOpen={isDrawerOpen}
-        size="md" // Set the size of the drawer
+        size="md"
       >
         <DrawerOverlay>
           <DrawerContent>
             <DrawerHeader borderBottomWidth="1px">Search</DrawerHeader>
             <DrawerBody>
-              <Box p="4">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="chakra-input"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button onClick={handleSearchButtonClick}>Search</button>
-
-                {/* Display search results within the drawer */}
-                <ul>
-                  {searchResults.map((result) => (
-                    <li key={result.id}>{result.name}</li>
+              <Box p="5">
+                <form onSubmit={handleFormSubmit}> 
+                  <Flex> {/* Use Flex to create a horizontal layout */}
+                    <Input
+                      type="text"
+                      placeholder="Search Courses ..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      size="lg"
+                    />
+                    <Button
+                      colorScheme="teal"
+                      leftIcon={<SearchIcon />}
+                      onClick={searchDatabase}
+                      ml="2" // Add margin-left for spacing
+                      mt="0" // Remove margin-top
+                    >
+                      Search
+                    </Button>
+                  </Flex>
+                </form>
+                <Box mt="4">
+                  {searchResults.map((result, index) => (
+                    <div key={result.id} onClick={() => handleCardClick(result)}>
+                      <Card
+                        key={result.code}
+                        tag1={"Semester " + result.semester}
+                        tag2={result.units + " Units"}
+                        title={result.code}
+                        description={result.description}
+                      />
+                    </div>
                   ))}
-                </ul>
+                </Box>
               </Box>
             </DrawerBody>
           </DrawerContent>

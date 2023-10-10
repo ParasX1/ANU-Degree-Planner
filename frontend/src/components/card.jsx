@@ -1,3 +1,4 @@
+// // This is the CourseCard component. It is used to display individual courses in the Degree Planner application.
 // This is the CourseCard component. It is used to display individual courses in the Degree Planner application.
 // Each CourseCard displays two tags, a title, and a description of the course.
 // Importing necessary libraries and components
@@ -11,7 +12,9 @@ import {
   Text,
   Tag,
   Flex,
+  IconButton
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 
 // Function component for the CourseCard
 function CourseCard({
@@ -19,11 +22,13 @@ function CourseCard({
   tag2, // Second tag for the course
   title, // Title of the course
   description, // Description of the course
+  code,
+  onDelete, // receive onDelete prop here
 }) {
   // Render the CourseCard
   return (
     // Box component for padding and max width
-    <Box p={5} pl={10} maxWidth="400px">
+    <Box p={5} pl={10} maxWidth="400px" position="relative">
       <Card maxW="md" border="1px" borderColor="black" borderRadius={10} h="100%">
         <CardBody>
           <Stack mt="3" spacing="1">
@@ -55,6 +60,16 @@ function CourseCard({
               >
                 {tag2}
               </Tag>
+              <IconButton
+                icon={<CloseIcon />}
+                aria-label="Delete Card"
+                size="sm"
+                variant="ghost"
+                position="absolute"
+                top="0"
+                right="0"
+                onClick={() => onDelete(code)}
+              />
             </Flex>
             <Box pl={5} pt={2} pb={2} ml={-2}>
               <Heading size="md" py={1} className='karla' fontWeight="medium">
@@ -82,4 +97,3 @@ function CourseCard({
 
 // Exporting the CourseCard component
 export default CourseCard;
-
