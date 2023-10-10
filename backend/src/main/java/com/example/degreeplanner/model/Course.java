@@ -17,7 +17,7 @@ public class Course {
 
     private String subject;
 
-    private String catalogue;
+    private int catalogue;
 
     private int semester;
 
@@ -47,7 +47,7 @@ public class Course {
         return subject;
     }
 
-    public String getCatalogue() {
+    public int getCatalogue() {
         return catalogue;
     }
 
