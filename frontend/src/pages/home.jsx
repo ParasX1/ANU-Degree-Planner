@@ -134,7 +134,7 @@ return (
                               tag1={"Semester " + card.semester}
                               tag2={card.units + " Units"}
                               title={card.code}
-                              description="Ryan forgot to add the name"
+                              description={card.description}
                               code={card.code}
                               onDelete={() => onDelete(card.code, yearIndex)}
                             />
