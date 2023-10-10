@@ -18,7 +18,7 @@ public class CourseController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/data")
     public ResponseEntity<List<Course>> searchCourses(@RequestParam(required = false, defaultValue = "") String search) {
-        List<Course> courses = courseService.searchCoursesByCode(search);
+        List<Course> courses = courseService.searchCoursesContainingCode(search);
         return ResponseEntity.ok(courses);
     }
 }

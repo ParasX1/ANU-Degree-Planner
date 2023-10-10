@@ -199,7 +199,7 @@ public abstract class Exp {
 
             for (int sem = 0; sem < semester; sem++) {
                 for (Course course: degree.getSemester(sem)) {
-                    if (course.getSubject().equals(college) && course.getCatalogue() >= level)
+                    if (course.getSubject().equals(college) && course.getLevel() >= level)
                         unitCount += 6;
                 }
             }
