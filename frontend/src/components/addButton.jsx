@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Box,
   Drawer,
@@ -36,14 +36,6 @@ function AddButton({ addCard }) {
         .then((data) => setSearchResults(data))
         .catch((error) => console.error(error));
   }, [searchTerm]); // declaring searchTerm as a dependency as it’s used inside the function
-
-  useEffect(() => {
-    console.log('Component has rendered/re-rendered');
-    const timerId = setTimeout(() => {
-      searchDatabase();
-    }, 500);
-    return () => clearTimeout(timerId);
-  }, [searchTerm, searchDatabase]);
 
   const handleCardClick = (cardData) => {
     addCard(cardData);
@@ -98,7 +90,7 @@ function AddButton({ addCard }) {
                   </Flex>
                 </form>
                 <Box mt="4">
-                  {searchResults.slice(0, 4).map((result, index) => (
+                  {searchResults.map((result, index) => (
                     <div key={result.id} onClick={() => handleCardClick(result)}>
                       <Card
                         key={result.code}
