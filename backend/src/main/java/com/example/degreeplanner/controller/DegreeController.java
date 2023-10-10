@@ -26,12 +26,15 @@ public class DegreeController {
 
     @PostMapping("/validate")
     public ResponseEntity<?> validateCourses(@RequestBody DegreeRequestDTO degreeRequest) {
+        // Convert the degreeDTO into an actual degree.
         Degree degree = degreeService.convertToDegree(degreeRequest);
-        List<List<String>> results = courseValidationService.validate(degree);
 
+        // Evaluate the degrees courses to check if their prerequisites are correct.
+        List<List<String>> results = courseValidationService.validate(degree);
         ValidationResultsDTO resultsReturn = new ValidationResultsDTO();
         resultsReturn.setSemesters(results);
 
+        // Return the validaiton results, which is a list of semesters, each semester contains courses that are invalid.
         return ResponseEntity.ok(resultsReturn);
     }
 

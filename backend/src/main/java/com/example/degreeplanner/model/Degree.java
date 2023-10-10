@@ -25,14 +25,5 @@ public class Degree {
         }
         return semesters.get(sem);
     }
-
-    /**
-     *
-     * @return an int representing how many semesters are in the degree.
-     */
-    public int getSemesterCount() {
-        return semesters.size();
-    }
-
 }
 
