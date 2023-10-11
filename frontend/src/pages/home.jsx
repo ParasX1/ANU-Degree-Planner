@@ -50,6 +50,54 @@ function Home() {
       });
   };
 
+  function getInvalidCourses(data) {
+    let result = [];
+    
+    data.degree.forEach(year => {
+      year.forEach(semester => {
+        if (semester.length) {
+          result.push(semester);
+        }
+      })
+    });
+
+    return result;
+
+  }
+
+  const validateDegree = () => {
+
+    const degree = years.map(year =>
+      year.map(semester =>
+        semester.map(course => course.code)
+      )
+    );
+
+    const paylod = {degree : degree};
+
+    fetch('http://localhost:8080/api/degree/validate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(paylod)
+    })
+    .then(response => { 
+      if (!response.ok){
+        console.log("Backend validate was not OK");
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert("The following courses are invalid\n" + getInvalidCourses(data));
+    })
+    .catch(error => {
+      console.error("There was an error with the fetch operation", error);
+    });
+
+
+  };
+
 
   // Modified to add courses to the current year's array
   const addCard = (cardData, yearIndex, targetSemester) => {
@@ -86,7 +134,7 @@ function Home() {
     const updatedYear = [...years];
     updatedYear[yearIndex][semesterIdx] = [...currentSemester, cardData];
     setYears(updatedYear);
-    };
+  };
 
    // Function to delete a card
     const onDelete = (cardCode, yearIndex, semesterIndex) => {
@@ -114,7 +162,7 @@ return (
   <Box>
       <Header />
       <div style={{ paddingTop: "60px" }}>
-          <Title onSave={saveAsPDF} isPDFMode={isPDFMode}/>
+          <Title onSave={saveAsPDF} isPDFMode={isPDFMode} onValidate={validateDegree}/>
       </div>
       <div id="contentToSave">
       {years.map((year, yearIndex) => (

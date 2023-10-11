@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class Degree {
 
-    private List<List<Course>> semesters;
+    private List<List<List<Course>>> years;
 
     /**
      * getSemester method takes a semester as input and returns the list of courses that represent that semester.
@@ -20,10 +20,13 @@ public class Degree {
      * @return a list of courses representing the semester that is retrieved.
      */
     public List<Course> getSemester(int sem) {
-        if (sem >= semesters.size()) {
+        int yearIdx = sem / 2;
+        int semIdx = sem % 2;
+
+        if (yearIdx > years.size()) {
             return null;
         }
-        return semesters.get(sem);
+        return years.get(yearIdx).get(semIdx);
     }
 }
 

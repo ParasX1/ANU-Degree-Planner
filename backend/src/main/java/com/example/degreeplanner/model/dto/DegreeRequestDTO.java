@@ -9,6 +9,6 @@ import java.util.List;
 @Setter
 public class DegreeRequestDTO {
 
-    private List<List<String>> semesters;
+    private List<List<List<String>>> degree;
 
 }

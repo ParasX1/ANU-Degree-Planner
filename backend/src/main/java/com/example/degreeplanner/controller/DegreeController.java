@@ -7,10 +7,7 @@ import com.example.degreeplanner.service.CourseValidationService;
 import com.example.degreeplanner.service.DegreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,15 +21,16 @@ public class DegreeController {
     @Autowired
     CourseValidationService courseValidationService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/validate")
     public ResponseEntity<?> validateCourses(@RequestBody DegreeRequestDTO degreeRequest) {
         // Convert the degreeDTO into an actual degree.
         Degree degree = degreeService.convertToDegree(degreeRequest);
 
         // Evaluate the degrees courses to check if their prerequisites are correct.
-        List<List<String>> results = courseValidationService.validate(degree);
+        List<List<List<String>>> results = courseValidationService.validate(degree);
         ValidationResultsDTO resultsReturn = new ValidationResultsDTO();
-        resultsReturn.setSemesters(results);
+        resultsReturn.setDegree(results);
 
         // Return the validaiton results, which is a list of semesters, each semester contains courses that are invalid.
         return ResponseEntity.ok(resultsReturn);

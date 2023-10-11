@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Text, Flex, IconButton, Tooltip, Divider } from '@chakra-ui/react';
-import { FaSearch, FaBookmark } from 'react-icons/fa'; // Import the search and bookmark icons
+import { FaCheck, FaBookmark } from 'react-icons/fa'; // Import the search and bookmark icons
 
-function Title({onSave, isPDFMode}) { // Adding onSave prop
+function Title({onSave, isPDFMode, onValidate}) { // Adding onSave prop
   return (
     <>
       <Flex
@@ -21,7 +21,7 @@ function Title({onSave, isPDFMode}) { // Adding onSave prop
             fontWeight="medium"
             fontStyle="italic"
           >
-            John's Degree Plan
+            Lisa's Degree Plan
           </Text>
           <Text
             className='karla'
@@ -38,15 +38,16 @@ function Title({onSave, isPDFMode}) { // Adding onSave prop
           <Flex flexDirection="column" alignItems="center" ml="10px" mt="20px">
             {!isPDFMode && ( // Conditional rendering for the Search icon
             <>
-            <Tooltip label="Search">
+            <Tooltip label="Validate">
               <IconButton
-                aria-label="Search"
-                icon={<FaSearch color="white" />}
+                aria-label="Validate"
+                icon={<FaCheck color="white" />}
                 borderRadius="50%"
                 bg="black"
+                onClick = {onValidate} // Calls the onValidate function when the validate button is pressed.
               />
             </Tooltip>
-            <Text mt="1" color="black" fontSize="xs">Search</Text>
+            <Text mt="1" color="black" fontSize="xs">Validate</Text>
             </>
           )}
         </Flex>

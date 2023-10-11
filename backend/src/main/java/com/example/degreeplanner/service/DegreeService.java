@@ -19,23 +19,26 @@ public class DegreeService {
 
         // Creates a new degree.
         Degree degree = new Degree();
-        List<List<Course>> semesters = new ArrayList<>();
 
-        // Converts the semesters with String Codes to semesters of Course.
-        for (List<String> rawSemester : dto.getSemesters()) {
-            ArrayList<Course> semester = new ArrayList<>();
+        List<List<List<Course>>> years = new ArrayList<>();
 
-            // Get the course that corresponds to the code from the CourseService
-            for (String courseCode : rawSemester) {
-                Course course = courseService.searchCoursesByCode(courseCode);
-                semester.add(course);
+        for (List<List<String>> rawYear : dto.getDegree()) {
+            List<List<Course>> year = new ArrayList<>();
+
+            for (List<String> rawSemester : rawYear) {
+
+                List<Course> semester = new ArrayList<>();
+
+                for (String courseCode : rawSemester) {
+                    Course course = courseService.searchCoursesByCode(courseCode);
+                    semester.add(course);
+                }
+                year.add(semester);
             }
-
-            semesters.add(semester);
-
+            years.add(year);
         }
 
-        degree.setSemesters(semesters);
+        degree.setYears(years);
 
         return degree;
     }
