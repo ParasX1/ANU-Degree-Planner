@@ -50,6 +50,12 @@ function Home() {
       });
   };
 
+  const validateDegree = () => {
+
+    
+
+  }
+
 
   // Modified to add courses to the current year's array
   const addCard = (cardData, yearIndex, targetSemester) => {
@@ -114,7 +120,7 @@ return (
   <Box>
       <Header />
       <div style={{ paddingTop: "60px" }}>
-          <Title onSave={saveAsPDF} isPDFMode={isPDFMode}/>
+          <Title onSave={saveAsPDF} isPDFMode={isPDFMode} onValidate={validateDegree}/>
       </div>
       <div id="contentToSave">
       {years.map((year, yearIndex) => (
