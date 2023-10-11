@@ -12,7 +12,8 @@ import {
   Text,
   Tag,
   Flex,
-  IconButton
+  IconButton,
+  Link as ChakraLink
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
@@ -73,7 +74,15 @@ function CourseCard({
             </Flex>
             <Box pl={5} pt={2} pb={2} ml={-2}>
               <Heading size="md" py={1} className='karla' fontWeight="medium">
-                {title}
+                <ChakraLink
+                    href={`https://programsandcourses.anu.edu.au/2023/course/${title}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="blue.500"
+                    _hover={{ textDecoration: 'underline' }}
+                >
+                  {title}
+                </ChakraLink>
               </Heading>
               <Text
                 className='karla'
