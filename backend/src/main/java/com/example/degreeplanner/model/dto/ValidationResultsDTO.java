@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 public class ValidationResultsDTO {
 
-    private List<List<String>> semesters;
+    private List<List<List<String>>> degree;
 }

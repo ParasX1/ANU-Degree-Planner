@@ -28,9 +28,9 @@ public class DegreeController {
         Degree degree = degreeService.convertToDegree(degreeRequest);
 
         // Evaluate the degrees courses to check if their prerequisites are correct.
-        List<List<String>> results = courseValidationService.validate(degree);
+        List<List<List<String>>> results = courseValidationService.validate(degree);
         ValidationResultsDTO resultsReturn = new ValidationResultsDTO();
-        resultsReturn.setSemesters(results);
+        resultsReturn.setDegree(results);
 
         // Return the validaiton results, which is a list of semesters, each semester contains courses that are invalid.
         return ResponseEntity.ok(resultsReturn);

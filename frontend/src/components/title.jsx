@@ -21,7 +21,7 @@ function Title({onSave, isPDFMode, onValidate}) { // Adding onSave prop
             fontWeight="medium"
             fontStyle="italic"
           >
-            John's Degree Plan
+            Lisa's Degree Plan
           </Text>
           <Text
             className='karla'
