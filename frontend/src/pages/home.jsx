@@ -89,7 +89,7 @@ function Home() {
       return response.json();
     })
     .then(data => {
-      alert(getInvalidCourses(data));
+      alert("The following courses are invalid\n" + getInvalidCourses(data));
     })
     .catch(error => {
       console.error("There was an error with the fetch operation", error);
