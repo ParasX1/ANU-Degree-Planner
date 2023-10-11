@@ -1,8 +1,16 @@
 package com.example.degreeplanner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "course_data")
+@Getter
+@NoArgsConstructor
+@Data
 public class Course {
 
     @Id
@@ -26,44 +34,22 @@ public class Course {
 
     private String prerequisite;
 
+    @Column(name = "prereq_processed")
+    private String prereqProcessed;
+
     @Column(name = "website_link")
     private String webLink;
 
-
-
-    public Course() {
-
+    @JsonIgnore
+    public int getLevel() {
+        String level = catalogue.substring(0, 1);
+        return Integer.parseInt(level) * 1000;
     }
 
-    public String getDescription() {
-        return description;
+    @JsonIgnore
+    public String getPrereqProcessed() {
+        return prereqProcessed;
     }
 
-    public String getCode() {
-        return code;
-    }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getCatalogue() {
-        return catalogue;
-    }
-
-    public int getSemester() {
-        return semester;
-    }
-
-    public int getUnits() {
-        return units;
-    }
-
-    public String getPrerequisite() {
-        return prerequisite;
-    }
-
-    public String getWebLink() {
-        return webLink;
-    }
 }

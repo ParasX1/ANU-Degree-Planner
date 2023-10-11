@@ -13,8 +13,12 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public List<Course> searchCoursesByCode(String search) {
+    public List<Course> searchCoursesContainingCode(String search) {
         return courseRepository.findCourseByCodeContainingIgnoreCase(search);
+    }
+
+    public Course searchCoursesByCode(String code) {
+        return courseRepository.findByCode(code);
     }
 
 }
