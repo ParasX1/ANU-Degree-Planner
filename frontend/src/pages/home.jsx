@@ -11,8 +11,8 @@ import { jsPDF } from 'jspdf';
 
 
 function Home() {
-  const [addedCards, setAddedCards] = useState([]);
-  const [years, setYears] = useState([]); // Empty array as the initial state
+
+  const [years, setYears] = useState([]); //Stores a list of years. Each year stores two semesters. Each semester stores courses.
   const [isPDFMode, setIsPDFMode] = useState(false);
 
 
@@ -53,38 +53,46 @@ function Home() {
 
   // Modified to add courses to the current year's array
   const addCard = (cardData, yearIndex, targetSemester) => {
-    const currentYearCards = addedCards[yearIndex]; // Use the given year index
 
-   // Check if a card with the same code already exists in the current year
-    const cardExists = currentYearCards.some((card) => card.code === cardData.code);
-      if (cardExists) {
-        alert("This course is already added.");
-        return;
-      }
+    const currentYear = years[yearIndex]
+    
+    if (!currentYear) {
+      console.log("Year doesn't exist");
+      return;
+    }
 
-    // Validate the semester
-    if (cardData.semester !== targetSemester) {
-    alert(`This course is designed for Semester ${cardData.semester} and can't be added to Semester ${targetSemester}.`);return; }
+    const semesterIdx = targetSemester - 1;
+    const currentSemester = currentYear[semesterIdx];
 
-    // Check if the maximum limit of 4 cards per semester is reached
-    const semesterCards = currentYearCards.filter((card) => card.semester === cardData.semester);
-      if (semesterCards.length >= 4) {
-        alert("Maximum limit of 4 courses per semester reached.");
-        return;
-      }
+    // Check if the card can be added to the semester.
+    if (cardData.semester !== targetSemester && cardData.semester !== 3 && cardData.semester !== -1) {
+      alert(`This course is designed for Semester ${cardData.semester} and can't be added to Semester ${targetSemester}.`);
+      return;
+    }
 
-    // Add the card to the current year
-    const updatedYearCards = [...currentYearCards, cardData];
-    const updatedAllCards = [...addedCards];
-    updatedAllCards[yearIndex] = updatedYearCards;
-    setAddedCards(updatedAllCards);
+    // Check if a card with the same code already exists in the current year
+    if (currentSemester.some((card) => card.code === cardData.code)) {
+      alert("This course has already been added");
+      return;
+    }
+
+    // Check if the semester limit has already been reached.
+    if (currentSemester.length >= 4) {
+      alert("Maximum limit of 4 courses per semester reached.");
+      return;
+    }
+
+    // Add the course to the semester.
+    const updatedYear = [...years];
+    updatedYear[yearIndex][semesterIdx] = [...currentSemester, cardData];
+    setYears(updatedYear);
     };
 
    // Function to delete a card
-    const onDelete = (cardCode, yearIndex) => {
-        const updatedCards = [...addedCards];
-        updatedCards[yearIndex] = updatedCards[yearIndex].filter(card => card.code !== cardCode);
-        setAddedCards(updatedCards);
+    const onDelete = (cardCode, yearIndex, semesterIndex) => {
+      const updatedYears = [...years];
+      updatedYears[yearIndex][semesterIndex] = updatedYears[yearIndex][semesterIndex].filter(card => card.code !== cardCode);
+      setYears(updatedYears);
     };
 
     // Function to delete a year
@@ -93,22 +101,16 @@ function Home() {
         const updatedYears = [...years];
         updatedYears.splice(yearIndex, 1);
         setYears(updatedYears);
-
-        // Remove the courses for that year
-        const updatedCards = [...addedCards];
-        updatedCards.splice(yearIndex, 1);
-        setAddedCards(updatedCards);
     };
 
 
   const addNewYear = () => {
-    setYears([...years, {}]);  // We just add an empty object to denote a new year.
-    setAddedCards([...addedCards, []]);
+    setYears([...years, [[], []]]);
   };
 
 return (
 <>
-  <h1>TEST</h1>
+  <h1>HOME</h1>
   <Box>
       <Header />
       <div style={{ paddingTop: "60px" }}>
@@ -116,7 +118,7 @@ return (
       </div>
       <div id="contentToSave">
       {years.map((year, yearIndex) => (
-        <div key={year}>
+        <div key={yearIndex}>
           <Year
             text={`YEAR ${yearIndex + 1}`}  // Use the yearIndex + 1 as the year number.
             onDelete={() => deleteYear(yearIndex)}
@@ -126,8 +128,7 @@ return (
                 <Semester text={semesterText} />
                   <Box>
                     <Flex pl={10}>
-                      {addedCards[yearIndex]
-                        .filter((card) => card.semester === semesterIndex + 1)
+                      {year[semesterIndex]
                         .map((card, Index) => (
                           <Box key={card.code} position="relative" marginRight="10px">
                             <Card
@@ -136,7 +137,7 @@ return (
                               title={card.code}
                               description={card.description}
                               code={card.code}
-                              onDelete={() => onDelete(card.code, yearIndex)}
+                              onDelete={() => onDelete(card.code, yearIndex, semesterIndex)}
                             />
                           </Box>
                         ))}
